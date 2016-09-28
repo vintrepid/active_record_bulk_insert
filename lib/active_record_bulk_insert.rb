@@ -15,7 +15,8 @@ ActiveRecord::Base.class_eval do
     return [] if attrs.empty?
 
     use_provided_primary_key = options.fetch(:use_provided_primary_key, false)
-    attributes = _resolve_record(attrs.first, options).keys.join(", ")
+    attributes = _resolve_record(attrs.first, options).keys.
+       map{|k|connection.quote_column_name(k)}.join(", ")
 
     invalid = []
     if options.fetch(:validate, false)
